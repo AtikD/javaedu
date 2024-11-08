@@ -1,7 +1,6 @@
 package lab3;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 interface ICpu {
     void exec(Command c);

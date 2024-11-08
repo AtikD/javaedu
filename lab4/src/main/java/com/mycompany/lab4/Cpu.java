@@ -1,9 +1,31 @@
-package lab3;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.lab4;
+
+/**
+ *
+ * @author atik
+ */
+
+interface ICpu {
+    void exec(Command c);
+}
+
 
 class Cpu implements ICpu {
-    private final int[] registers = new int[4]; // a = registers[0], b = registers[1], c = registers[2], d = registers[3]
+    private final int[] registers = new int[4]; 
     private final int[] memory = new int[50];
-
+    
+    public int getMemory(int index) {
+        if (index >= 0 && index < memory.length) { 
+            return memory[index];
+        } else {
+            throw new IndexOutOfBoundsException("Индекс вне границ массива памяти.");
+        }
+    }
+        
     @Override
     public void exec(Command c) {
         switch (c.instruction) {
@@ -38,8 +60,8 @@ class Cpu implements ICpu {
                 System.out.println("Неизвестная инструкция: " + c.instruction);
         }
     }
-
-    private int getRegisterIndex(String reg) {
+        
+    public int getRegisterIndex(String reg) {
         return switch (reg) {
             case "a" -> 0;
             case "b" -> 1;
@@ -50,7 +72,7 @@ class Cpu implements ICpu {
     }
 
     private void init(String[] args) {
-        int address = Integer.parseInt(args[0]);
+        int address = Integer.parseInt(args[0]) - 1;
         int value = Integer.parseInt(args[1]);
         if (address >= 0 && address < memory.length) {
             memory[address] = value;
@@ -63,7 +85,7 @@ class Cpu implements ICpu {
         int regIndex = getRegisterIndex(args[0]);
         int address = Integer.parseInt(args[1]);
         if (address >= 0 && address < memory.length) {
-            registers[regIndex] = memory[address];
+            registers[regIndex] = address;
         } else {
             System.out.println("Неверный адрес памяти: " + address);
         }
@@ -73,7 +95,7 @@ class Cpu implements ICpu {
         int regIndex = getRegisterIndex(args[0]);
         int address = Integer.parseInt(args[1]);
         if (address >= 0 && address < memory.length) {
-            memory[address] = registers[regIndex];
+            memory[address] = memory[registers[regIndex]];
         } else {
             System.out.println("Неверный адрес памяти: " + address);
         }
@@ -82,24 +104,24 @@ class Cpu implements ICpu {
     private void mv(String[] args) {
         int regIndex1 = getRegisterIndex(args[0]);
         int regIndex2 = getRegisterIndex(args[1]);
-        registers[regIndex1] = registers[regIndex2];
+        registers[regIndex2] = registers[regIndex1];
     }
 
     private void add() {
-        registers[3] = registers[0] + registers[1];
+        registers[3] = memory[registers[0]] + memory[registers[1]];
     }
 
     private void sub() {
-        registers[3] = registers[0] - registers[1];
+        registers[3] = memory[registers[0]] - memory[registers[1]];
     }
 
     private void mult() {
-        registers[3] = registers[0] * registers[1];
+        registers[3] = memory[registers[0]] * memory[registers[1]];
     }
 
     private void div() {
         if (registers[1] != 0) {
-            registers[3] = registers[0] / registers[1];
+            registers[3] = memory[registers[0]] / memory[registers[1]];
         } else {
             System.out.println("Ошибка: деление на ноль");
         }
@@ -112,4 +134,12 @@ class Cpu implements ICpu {
         System.out.println("c = " + registers[2]);
         System.out.println("d = " + registers[3]);
     }
+    
+    public int getRegisterValue(int index) {
+    if (index >= 0 && index < registers.length) {
+        return registers[index];
+    } else {
+        throw new IndexOutOfBoundsException("Неверный индекс регистра: " + index);
+    }
+}
 }
