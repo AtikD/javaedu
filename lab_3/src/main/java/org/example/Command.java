@@ -1,4 +1,4 @@
-package lab3;
+package org.example;
 
 class Command {
     String instruction;

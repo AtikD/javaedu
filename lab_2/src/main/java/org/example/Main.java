@@ -1,8 +1,26 @@
-package lab3;
+package org.example;
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+interface ICpu {
+    void exec(Command c);
+}
+
+
+class Command {
+    String instruction;
+    String[] args;
+
+    public Command(String instruction, String... args) {
+        this.instruction = instruction;
+        this.args = args;
+    }
+}
+
 
 class Cpu implements ICpu {
     private final int[] registers = new int[4]; // a = registers[0], b = registers[1], c = registers[2], d = registers[3]
-    private final int[] memory = new int[50];
+    private final int[] memory = new int[1024];
 
     @Override
     public void exec(Command c) {
@@ -111,5 +129,44 @@ class Cpu implements ICpu {
         System.out.println("b = " + registers[1]);
         System.out.println("c = " + registers[2]);
         System.out.println("d = " + registers[3]);
+    }
+}
+
+
+class Executer {
+    private final ICpu cpu;
+
+    public Executer(ICpu cpu) {
+        this.cpu = cpu;
+    }
+
+    public void run(Command[] program) {
+        for (Command c : program) {
+            cpu.exec(c);
+        }
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Command[] prog = {
+                new Command("init", "10", "20"),
+                new Command("init", "11", "25"),
+                new Command("init", "12", "5"),
+                new Command("ld", "a", "10"),
+                new Command("ld", "b", "11"),
+                new Command("ld", "c", "12"),
+                new Command("add"),
+                new Command("print"),  // вывод: a=20, b=25, c=5, d=45
+                new Command("mv", "a", "d"),
+                new Command("mv", "b", "c"),
+                new Command("div"),
+                new Command("print")   // вывод: a=45, b=5, c=5, d=9
+        };
+
+        ICpu cpu = new Cpu();
+        Executer exec = new Executer(cpu);
+        exec.run(prog);
     }
 }

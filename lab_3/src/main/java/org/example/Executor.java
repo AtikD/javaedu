@@ -1,4 +1,4 @@
-package lab3;
+package org.example;
 
 class Executer {
     private final ICpu cpu;

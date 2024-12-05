@@ -1,4 +1,4 @@
-package lab3;
+package org.example;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -65,3 +65,4 @@ class Program implements Iterable<Command> {
                 .collect(Collectors.toList());
     }
 }
+
