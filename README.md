@@ -95,4 +95,5 @@ Executer exec = new Executer(cpu);
 exec.run(prog);
 ```
 
+2 курс
 Осень 2024
