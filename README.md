@@ -94,3 +94,5 @@ ICpu cpu = new Cpu();
 Executer exec = new Executer(cpu);
 exec.run(prog);
 ```
+
+Осень 2024
